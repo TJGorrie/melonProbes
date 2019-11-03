@@ -1,0 +1,10 @@
+Package: melonProbes
+Title: melonProbes
+Version: 0.0.1
+Authors@R: person('Tyler', 'Gorrie-Stone', email = 'tgorri@essex.ac.uk', role = c('aut', 'cre'))
+Description: Test for potentially problematic probes in DNA methylation microarray data
+Depends: R (>= 3.1.0)
+Suggests: wateRmelon, bigmelon
+Collate: probeTests.R
+License:
+LazyData: true
