@@ -6,9 +6,9 @@
 #' @param manifest Specify which manifest to use
 #' @param beadcounts Default: NULL, provide with a matrix containing beadcounts
 #' @param detection Default: NULL, provide with a matrix containing detection P values
-#' @param nb A value between 0 and 1, represents the % of datasets a probe has failed in. Default is 0.2 (20%) however all probes can be tested by specifing a value of 0.
-#' @param np A value between 0 and 1, represents the % of datasets a probe has failed in. Default is 0.2 (20%) however all probes can be tested by specifing a value of 0.
-#' @param nvar A value between 0 and 1, represents the % of datasets a probe has failed in. Default is 0.5 (50%) however all probes can be tested by specifing a value of 0.
+#' @param nb A value between 0 and 1, represents the \% of datasets a probe has failed in. Default is 0.2 (20\%) however all probes can be tested by specifing a value of 0.
+#' @param np A value between 0 and 1, represents the \% of datasets a probe has failed in. Default is 0.2 (20\%) however all probes can be tested by specifing a value of 0.
+#' @param nvar A value between 0 and 1, represents the \% of datasets a probe has failed in. Default is 0.5 (50\%) however all probes can be tested by specifing a value of 0.
 #' @param ot A character vector describing the probe design for CpGs (must contain 'I' and 'II')
 #' @param nbCount The beadcount to test probes in your dataset against
 #' @param nbThresh The proportion of samples 
@@ -36,6 +36,8 @@ testProbes <- function(betas, manifest = c('450k', 'EPIC'), beadcounts = NULL, d
     		manifest <- melonProbesEpic
     	}
     ) 
+
+    manifest <- manifest[intersect(rownames(manifest), rownames(betas)),]
     if(!is.null(beadcounts)){
     # Test beadcounts
     badbc <- manifest$PercBadBc > nb
@@ -86,9 +88,9 @@ setGeneric(name="testProbes")
 #' @param manifest Specify which manifest to use
 #' @param beadcounts Default: NULL, provide with a matrix containing beadcounts
 #' @param detection Default: NULL, provide with a matrix containing detection P values
-#' @param nb A value between 0 and 1, represents the % of datasets a probe has failed in. Default is 0.2 (20%) however all probes can be tested by specifing a value of 0.
-#' @param np A value between 0 and 1, represents the % of datasets a probe has failed in. Default is 0.2 (20%) however all probes can be tested by specifing a value of 0.
-#' @param nvar A value between 0 and 1, represents the % of datasets a probe has failed in. Default is 0.5 (50%) however all probes can be tested by specifing a value of 0.
+#' @param nb A value between 0 and 1, represents the \% of datasets a probe has failed in. Default is 0.2 (20\%) however all probes can be tested by specifing a value of 0.
+#' @param np A value between 0 and 1, represents the \% of datasets a probe has failed in. Default is 0.2 (20\%) however all probes can be tested by specifing a value of 0.
+#' @param nvar A value between 0 and 1, represents the \% of datasets a probe has failed in. Default is 0.5 (50\%) however all probes can be tested by specifing a value of 0.
 #' @param ot A character vector describing the probe design for CpGs (must contain 'I' and 'II')
 #' @param nbCount The beadcount to test probes in your dataset against
 #' @param nbThresh The proportion of samples 
@@ -134,9 +136,9 @@ setMethod(
 #' @param manifest Specify which manifest to use
 #' @param beadcounts Default: NULL, provide with a matrix containing beadcounts
 #' @param detection Default: NULL, provide with a matrix containing detection P values
-#' @param nb A value between 0 and 1, represents the % of datasets a probe has failed in. Default is 0.2 (20%) however all probes can be tested by specifing a value of 0.
-#' @param np A value between 0 and 1, represents the % of datasets a probe has failed in. Default is 0.2 (20%) however all probes can be tested by specifing a value of 0.
-#' @param nvar A value between 0 and 1, represents the % of datasets a probe has failed in. Default is 0.5 (50%) however all probes can be tested by specifing a value of 0.
+#' @param nb A value between 0 and 1, represents the \% of datasets a probe has failed in. Default is 0.2 (20%) however all probes can be tested by specifing a value of 0.
+#' @param np A value between 0 and 1, represents the \% of datasets a probe has failed in. Default is 0.2 (20%) however all probes can be tested by specifing a value of 0.
+#' @param nvar A value between 0 and 1, represents the %\ of datasets a probe has failed in. Default is 0.5 (50%) however all probes can be tested by specifing a value of 0.
 #' @param ot A character vector describing the probe design for CpGs (must contain 'I' and 'II')
 #' @param nbCount The beadcount to test probes in your dataset against
 #' @param nbThresh The proportion of samples 
@@ -178,13 +180,13 @@ setMethod(
 #'
 #' Dataframe containing potentially bad probes for 450K microarray data
 #'
-#' @format A data frame with >800,000 rows and 9 variables:
+#' @format A data frame with 800,000 rows and 9 variables:
 #' \describe{
 #'   \item{Zhou_HG19}{Logical Vector of CpGs that are marked TRUE in Zhou's General Masking column for HG19}
 #'   \item{Zhou_HG38}{Logical Vector of CpGs that are marked TRUE in Zhou's General Masking column for HG38}
 #'   \item{PercLowVariation}{Numeric Vector describing the number of times a CpG is ranked in bottom 5th percentile of variation}
-#'   \item{PercBadBc}{Numeric Vector describing the number of times a CpG has a beadcount < 4 in 5% of samples.
-#'   \item{PercBadPv}{Numeric Vector describing the number of times a CpG has a detection p value > 0.05 in 1% of samples.	
+#'   \item{PercBadBc}{Numeric Vector describing the number of times a CpG has a beadcount  4 in 5 of samples.}
+#'   \item{PercBadPv}{Numeric Vector describing the number of times a CpG has a detection p value  0.05 in 1 of samples.}	
 #' }
 #'
 #' @usage data(melonProbes450k)
@@ -195,15 +197,14 @@ setMethod(
 #' @source 
 #'     \url{http://zwdzwd.github.io/InfiniumAnnotation}
 #'         
-#'    Pidsley, R., Zotenko, E., Peters, T.J. et al. Critical evaluation of the Illumina MethylationEPIC BeadChip microarray for whole-genome DNA methylation profiling. Genome Biol 17, 208 (2016) doi:10.1186/s13059-016-1066-1
+#'    Pidsley, R., Zotenko, E., Peters, T.J. et al. Critical evaluation of the Illumina MethylationEPIC BeadChip microarray for whole-genome DNA methylation profiling. Genome Biol 17, 208 (2016) doi:10.1186\/s13059-016-1066-1
 "melonProbes450k"
 
 #' Dataframe containing potentially bad probes for 450K microarray data
 #'
 #' Dataframe containing potentially bad probes for EPIC microarray data
 #'
-#'
-#' @format A data frame with >800,000 rows and 9 variables:
+#' @format A data frame with 800,000 rows and 9 variables:
 #' \describe{
 #'   \item{Zhou_HG19}{Logical Vector of CpGs that are marked TRUE in Zhou's General Masking column for HG19}
 #'   \item{Zhou_HG38}{Logical Vector of CpGs that are marked TRUE in Zhou's General Masking column for HG38}
@@ -212,8 +213,8 @@ setMethod(
 #'   \item{Pidsley_Overlap_Gene}{Logical Vector of CpGs that are marked TRUE if identified to have multiple genes mapping to the same CpG by Pidsley et al.}
 #'   \item{Pidsley_GeneVariant_Extension}{Logical Vector of CpGs that are marked TRUE if identified to have a SNP in the probe single base extension identified by Pidsley et al.}
 #'   \item{PercLowVariation}{Numeric Vector describing the number of times a CpG is ranked in bottom 5th percentile of variation}
-#'   \item{PercBadBc}{Numeric Vector describing the number of times a CpG has a beadcount < 4 in 5% of samples.
-#'   \item{PercBadPv}{Numeric Vector describing the number of times a CpG has a detection p value > 0.05 in 1% of samples.	
+#'   \item{PercBadBc}{Numeric Vector describing the number of times a CpG has a beadcount 4 in 5 of samples.}
+#'   \item{PercBadPv}{Numeric Vector describing the number of times a CpG has a detection p value 0.05 in 1 of samples.}
 #' }
 #'
 #' @usage data(melonProbesEpic)
