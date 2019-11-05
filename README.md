@@ -12,9 +12,8 @@ The melonProbes package can be install using `devtools`
 devtools::install_github('tjgorrie/melonProbes')
 ```
 
+## Features
+We provide Pidsley and Zhou probe lists too.
+Can filter probe-lists with this or even test data for problems.
+
 ## Usage
-
-## We provide Pidsley and Zhou probe lists too.
-## Can filter probe-lists with this or even test data for problems.
-
-## Probes in horvath
