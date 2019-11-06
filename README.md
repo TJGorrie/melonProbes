@@ -26,9 +26,4 @@ data(melonProbes450k)
 data(melonProbesEpic)
 
 # Select probes to filter using a selection of probes or filters (Latter Columns (with numeric values)) indicate % of datasets a probe fails certain properties
-
-# Or test potentially problematic probes within a specified dataset.
-
-testProbes(aMethylumiSet, manifest = 'EPIC')
-testProbes(anRGChannelSetExtended, manifest = '450k')
 ```

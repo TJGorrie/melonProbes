@@ -40,17 +40,20 @@ testProbes <- function(betas, manifest = c('450k', 'EPIC'), beadcounts = NULL, d
     ) 
 
     manifest <- manifest[intersect(rownames(manifest), rownames(betas)),]
+    out <- list()
     if(!is.null(beadcounts)){
     # Test beadcounts
     badbc <- manifest$PercBadBc > nb
     badbcRelative <- (rowSums(beadcounts[badbc,] <= nbCount, na.rm = TRUE) / ncol(beadcounts)) > 0.05
     message(paste0(sum(badbcRelative), ' of ', sum(badbc), ' have a beadcount <= ', nbCount, ' in more than ', nbThresh*100 , '% of samples.'))
+    out[['BeadCounts']] = rownames(betas) %in% names(which(badbcRelative))
     }
     if(!is.null(detection)){
     # Test p-values
     badpv <- manifest$PercBadPv > np
     badpvRelative <- (rowSums(detection[badpv,] > pvCount, na.rm = TRUE) / ncol(detection)) > pvThresh
     message(paste0(sum(badpvRelative), ' of ', sum(badpv), ' have a beadcount <= ', pvCount, ' in more than ', pvThresh*100 , '% of samples.'))
+    out[['DetectionP']] = rownames(betas) %in% names(which(badpvRelative))
     }
     # Test variance
     # betas to test...
@@ -67,74 +70,16 @@ testProbes <- function(betas, manifest = c('450k', 'EPIC'), beadcounts = NULL, d
     bad_lowi <- badvar & I & low
     bad_lowii <- badvar & II & low
 
-	message(paste0(sum(bad_lowi), ' of ', sum(badvar & I), ' have a ranked in bottom ', nvarThresh*100, 'th percentile of Type I probes.'))
-	message(paste0(sum(bad_lowi), ' of ', sum(badvar & II), ' have a ranked in bottom ', nvarThresh*100, 'th percentile of Type II probes.'))
-    
+	message(paste0(sum(bad_lowi), ' of ', sum(badvar & I), ' are ranked in the bottom ', nvarThresh*100, 'th percentile of Type I probes.'))
+	message(paste0(sum(bad_lowi), ' of ', sum(badvar & II), ' are ranked in the bottom ', nvarThresh*100, 'th percentile of Type II probes.'))
+    out[['Variation']] = low
     # Test HW Snps
     # Currently missing D:
 
-    df <- data.frame(if(!is.null(beadcounts)) 'BeadCounts' = rownames(betas) %in% names(which(badbcRelative)),
-    	             if(!is.null(detection))  'DetectionP' = rownames(betas) %in% names(which(badpvRelative)),
-    	             'Variation' = low)
+    df <- data.frame(out)
     rownames(df) <- rownames(betas)
     return(df)
 }
-
-setGeneric(name="testProbes")
-
-#' Test Illumina CpG Probes for potential issues
-#' @export
-setMethod(
-   f= "testProbes",
-   signature(betas="MethyLumiSet"),
-   definition=function(betas, manifest = c('450k', 'EPIC'), beadcounts, detection, 
-	                   nb = .2, np = .2, nvar =.5, ot,
-	                   nbCount = 3, nbThresh = 0.05, pvCount = 0.05, pvThresh = 0.01, nvarThresh = 0.05){
-   	pv <- pvals(betas)
-   	bc <- assayDataElement(betas, "NBeads")
-    ot <- fot(betas)
-    bet <- betas(betas)
-
-   	testProbes(betas =  bet, manifest = manifest, 
-   		        beadcounts = pv, 
-   		        detection = bc, 
-	            nb = nb, 
-	            np = np, 
-	            nvar = nvar, 
-	            ot =,
-	            nbCount = nbCount, 
-	            nbThresh = nbThresh, 
-	            pvCount = pvCount, 
-	            pvThresh = pvThresh, 
-	            nvarThresh = nvarThresh)
-})
-
-#' Test Illumina CpG Probes for potential issues
-#' @export
-setMethod(
-   f= "testProbes",
-   signature(betas="RGChannelSetExtended"),
-   definition=function(betas, manifest = c('450k', 'EPIC'), beadcounts, detection, 
-	                   nb = .2, np = .2, nvar =.5, ot,
-	                   nbCount = 3, nbThresh = 0.05, pvCount = 0.05, pvThresh = 0.01, nvarThresh = 0.05){
-   	
-   	pv <- detectionP(betas)
-    bc <- as.matrix(beadcount(betas))
-   	ot <- got(betas)
-    bet <-getBeta(preprocessRaw(betas))
-   	testProbes(betas =bet, manifest = manifest, 
-   		        beadcounts = bc, 
-   		        detection = pv, 
-	            nb = nb, 
-	            np = np, 
-	            nvar = nvar, 
-	            ot =ot,
-	            nbCount = nbCount, 
-	            nbThresh = nbThresh, 
-	            pvCount = pvCount, 
-	            pvThresh = pvThresh, 
-	            nvarThresh = nvarThresh)
-})
 
 #' Dataframe containing potentially bad probes for 450K microarray data
 #'
