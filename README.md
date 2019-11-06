@@ -1,10 +1,12 @@
 # melonProbes
 
-melonProbes provides a very simple and elegant way to test common problems in DNA methylation microarray data by consulting bioinformatically determined probes which have known problems.
+The melonProbes R package provides a simple and elegant way to test frequently low quality or problematic probes in DNA methylation microarray data by consulting lists that have been bioinformatically determined. 
 
-The probelist was determined from using more than 30,000 450K array samples as seeks to identify probes which suffer the same problems that many other datasets have.
+For both lists (450k, and EPIC), the probe design has been queried by others and identified probes that are known to cross-hybridise or have underlying SNPs within their probe sequence. We extend these probe lists by using more than 30,000 450K array samples to identify probes which are frequently and technically low quality.
 
-These include checking detection P values, beadcounts, variation and minor allele frequencies. This tool can be used alongside Zhou's probelist and is compatible with methylumi, minfi and bigmelon objects with additional generic functions for alternative frameworks. While it is important to test all probes I am providing this package as a means to quickly screen out any probes that may lead to spurious association.
+These include checking detection P values, beadcounts, variation and minor allele frequencies. This tool can be used alongside Zhou's or Pidsley's probelists and will be compatible with methylumi, minfi and bigmelon objects with additional generic functions for alternative frameworks. 
+
+While it would be important to test all probes for potential problems, the default parameters are set up so the most problematic probes (therefore least likely to be reproduced) are tested. However with the correct parameters you will be able to test all probes. 
 
 ## Installation
 The melonProbes package can be install using `devtools`
@@ -28,9 +30,15 @@ data(melonProbesEpic)
 # Select probes to filter using a selection of probes or filters 
 (Latter Columns (with numeric values)) indicate % of datasets a probe fails certain properties
 
-data(melon) # Methylumi Example
+data(melon) 
+# Generic Example, test only problematic probes (skipping beadcounts)
 testProbes(betas(melon), manifest='450k', 
            beadcount = NULL, detection = pvals(melon), ot = fData(melon)[,fot(melon)])
+
+# Generic Example, test all probes!
+testProbes(betas(melon), manifest='450k', 
+           beadcount = NULL, detection = pvals(melon), ot = fData(melon)[,fot(melon)],
+           nb = 0, np = 0, nvar =0)
 
 ```
 
