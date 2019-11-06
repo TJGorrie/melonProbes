@@ -17,3 +17,18 @@ We provide Pidsley and Zhou probe lists too.
 Can filter probe-lists with this or even test data for problems.
 
 ## Usage
+
+```
+library(wateRmelon)
+library(melonProbes)
+# Load in either of the probelists
+data(melonProbes450k)
+data(melonProbesEpic)
+
+# Select probes to filter using a selection of probes or filters (Latter Columns (with numeric values)) indicate % of datasets a probe fails certain properties
+
+# Or test potentially problematic probes within a specified dataset.
+
+testProbes(aMethylumiSet, manifest = 'EPIC')
+testProbes(anRGChannelSetExtended, manifest = '450k')
+```
