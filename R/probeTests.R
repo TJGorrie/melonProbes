@@ -52,7 +52,7 @@ testProbes <- function(betas, manifest = c('450k', 'EPIC'), beadcounts = NULL, d
     # Test p-values
     badpv <- manifest$PercBadPv > np
     badpvRelative <- (rowSums(detection[badpv,] > pvCount, na.rm = TRUE) / ncol(detection)) > pvThresh
-    message(paste0(sum(badpvRelative), ' of ', sum(badpv), ' have a beadcount <= ', pvCount, ' in more than ', pvThresh*100 , '% of samples.'))
+    message(paste0(sum(badpvRelative), ' of ', sum(badpv), ' have a detection p > ', pvCount, ' in more than ', pvThresh*100 , '% of samples.'))
     out[['DetectionP']] = rownames(betas) %in% names(which(badpvRelative))
     }
     # Test variance
