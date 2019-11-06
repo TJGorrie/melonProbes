@@ -25,5 +25,15 @@ library(melonProbes)
 data(melonProbes450k)
 data(melonProbesEpic)
 
-# Select probes to filter using a selection of probes or filters (Latter Columns (with numeric values)) indicate % of datasets a probe fails certain properties
+# Select probes to filter using a selection of probes or filters 
+(Latter Columns (with numeric values)) indicate % of datasets a probe fails certain properties
+
+data(melon) # Methylumi Example
+testProbes(betas(melon), manifest='450k', 
+           beadcount = NULL, detection = pvals(melon), ot = fData(melon)[,fot(melon)])
+
 ```
+
+## To Do
+* Methods for methylumisets (methylumi) and RGChannelsets (minfi)
+* Add probes + test for probes that are in HW equilibrium
