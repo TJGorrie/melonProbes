@@ -18,8 +18,10 @@
 #'
 #' @return A data.frame of nrow(betas) x 3 columns specifying which probes have failed which tests.
 #'
+#' @examples
+#' #
+#' 
 #' @author Tyler Gorrie-Stone \email{tgorri@essex.ac.uk}
-#'
 #' @export
 testProbes <- function(betas, manifest = c('450k', 'EPIC'), beadcounts = NULL, detection = NULL, 
 	                   nb = .2, np = .2, nvar =.5, ot,
@@ -71,8 +73,8 @@ testProbes <- function(betas, manifest = c('450k', 'EPIC'), beadcounts = NULL, d
     # Test HW Snps
     # Currently missing D:
 
-    df <- data.frame('BeadCounts' = rownames(betas) %in% names(which(badbcRelative)),
-    	             'DetectionP' = rownames(betas) %in% names(which(badpvRelative)),
+    df <- data.frame(if(!is.null(beadcounts)) 'BeadCounts' = rownames(betas) %in% names(which(badbcRelative)),
+    	             if(!is.null(detection))  'DetectionP' = rownames(betas) %in% names(which(badpvRelative)),
     	             'Variation' = low)
     rownames(df) <- rownames(betas)
     return(df)
@@ -81,27 +83,6 @@ testProbes <- function(betas, manifest = c('450k', 'EPIC'), beadcounts = NULL, d
 setGeneric(name="testProbes")
 
 #' Test Illumina CpG Probes for potential issues
-#'
-#' Tests Illumina CpGs for potential issues that affect a given proportion of datasets. Useful for removing hits that may be unlikely to be reproduced
-#'
-#' @param betas A matrix contain beta values, or a RGChannelSetExtended, or a methylumiset
-#' @param manifest Specify which manifest to use
-#' @param beadcounts Default: NULL, provide with a matrix containing beadcounts
-#' @param detection Default: NULL, provide with a matrix containing detection P values
-#' @param nb A value between 0 and 1, represents the \% of datasets a probe has failed in. Default is 0.2 (20\%) however all probes can be tested by specifing a value of 0.
-#' @param np A value between 0 and 1, represents the \% of datasets a probe has failed in. Default is 0.2 (20\%) however all probes can be tested by specifing a value of 0.
-#' @param nvar A value between 0 and 1, represents the \% of datasets a probe has failed in. Default is 0.5 (50\%) however all probes can be tested by specifing a value of 0.
-#' @param ot A character vector describing the probe design for CpGs (must contain 'I' and 'II')
-#' @param nbCount The beadcount to test probes in your dataset against
-#' @param nbThresh The proportion of samples 
-#' @param pvCount The detection p value to test probes in your dataset against
-#' @param pvThresh The proportion of samples to which a probe can fail in
-#' @param nvarThresh The percentile of variation a probe can be in.
-#'
-#' @return A data.frame of nrow(betas) x 3 columns specifying which probes have failed which tests.
-#'
-#' @author Tyler Gorrie-Stone \email{tgorri@essex.ac.uk}
-#'
 #' @export
 setMethod(
    f= "testProbes",
@@ -129,27 +110,6 @@ setMethod(
 })
 
 #' Test Illumina CpG Probes for potential issues
-#'
-#' Tests Illumina CpGs for potential issues that affect a given proportion of datasets. Useful for removing hits that may be unlikely to be reproduced
-#'
-#' @param betas A matrix contain beta values, or a RGChannelSetExtended, or a methylumiset
-#' @param manifest Specify which manifest to use
-#' @param beadcounts Default: NULL, provide with a matrix containing beadcounts
-#' @param detection Default: NULL, provide with a matrix containing detection P values
-#' @param nb A value between 0 and 1, represents the \% of datasets a probe has failed in. Default is 0.2 (20%) however all probes can be tested by specifing a value of 0.
-#' @param np A value between 0 and 1, represents the \% of datasets a probe has failed in. Default is 0.2 (20%) however all probes can be tested by specifing a value of 0.
-#' @param nvar A value between 0 and 1, represents the %\ of datasets a probe has failed in. Default is 0.5 (50%) however all probes can be tested by specifing a value of 0.
-#' @param ot A character vector describing the probe design for CpGs (must contain 'I' and 'II')
-#' @param nbCount The beadcount to test probes in your dataset against
-#' @param nbThresh The proportion of samples 
-#' @param pvCount The detection p value to test probes in your dataset against
-#' @param pvThresh The proportion of samples to which a probe can fail in
-#' @param nvarThresh The percentile of variation a probe can be in.
-#'
-#' @return A data.frame of nrow(betas) x 3 columns specifying which probes have failed which tests.
-#'
-#' @author Tyler Gorrie-Stone \email{tgorri@essex.ac.uk}
-#'
 #' @export
 setMethod(
    f= "testProbes",

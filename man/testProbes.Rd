@@ -42,6 +42,10 @@ A data.frame of nrow(betas) x 3 columns specifying which probes have failed whic
 \description{
 Tests Illumina CpGs for potential issues that affect a given proportion of datasets. Useful for removing hits that may be unlikely to be reproduced
 }
+\examples{
+#
+
+}
 \author{
 Tyler Gorrie-Stone \email{tgorri@essex.ac.uk}
 }
