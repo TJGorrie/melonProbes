@@ -1,6 +1,6 @@
 Package: melonProbes
 Title: melonProbes
-Version: 0.0.1
+Version: 0.0.2
 Authors@R: person('Tyler', 'Gorrie-Stone', email = 'tgorri@essex.ac.uk', role = c('aut', 'cre'))
 Description: Test for potentially problematic probes in DNA methylation microarray data
 Depends: R (>= 3.5.0), Biobase, methods
