@@ -1,0 +1,42 @@
+\name{MelonProbesEPICHandbook}
+\alias{EPICHandbook, EPIC, MelonProbes, melonprobes}
+\docType{data}
+\title{
+MelonProbesEPIC Dataframe Handbook 
+}
+\description{
+This table provides information about DNA methylation EPIC array probes. Some of these probes are low quality and problematic. In order to detect these probes, each probes are tested for p-value, bead count, variation and cross-reactivity, gene variation, gene overlapping, extensin gene variation determined by Pidsley et al. Also checked for mapping on HG19 and HG38 human genome assemblies.
+}
+\usage{data("EPICHandbook")}
+\format{
+  There are 865918 Infinium Human DNA Metylation EPIC array probes and 9 variables.
+  \describe{
+    \item{\Zhou_HG19}{Logical vector shows which probe presents in Zhou's probelist and match on HG19 human reference genome}
+    \item{\Zhou_GH38}{Logical vector represents probes which can be found on Zhou's probelist and map on HG38 human assembly}
+    \item{\Pidsley_CrossReactive}{Logical vector depicts as TRUE when the probe has multiple bindind affinity determined by Pidsley et al.}
+    \item{\Pidsley_GeneVariant_Body}{Logical vector of probes which is identified as TRUE when 'SNP' and 'INDEL' variants overlap in the EPIC probes}
+    \item{\Pidsley_Overlap_Gene}{Logical vector of probes which is marked as TRUE when the probe matches more than one gene}
+    \item{\Pidsley_GeneVariant_Extension}{Logical vector of probes can be TRUE if it is identified as a SNP within the probe single base extension identified by Pidsley et al.}
+    \item{\PercLowVariation}{A value between 0 and 1, represents percentage of low variable probes}
+    \item{\PercBadbc}{A value between 0 and 1, describes percentage of bad bead count for this probe}
+    \item{\PercBadPv}{A value between 0 and 1, represents percentage of bad P value for that particular probe}
+  }
+}
+\details{
+
+}
+\source{
+https://github.com/TJGorrie/melonProbes 
+}
+\references{
+Pidsley, R., Zotenko, E., Peters, T. J., Lawrence, M. G., Risbridger, G. P., Molloy, P., Van Djik, S., Muhlhausler, B., Stirzaker, C. and Clark, S. J. (2016) Critical evaluation of the Illumina MethylationEPIC BeadChip microarray for whole-genome DNA methylation profiling.Genome Biol, 17, 208. 
+
+Zhou, W., Laird, P. W. and Shen, H. (2017) Comprehensive characterization, annotation and innovative use of Infinium DNA methylation BeadChip probes. Nucleic Acids Res, 45, e22.
+}
+\examples{
+data(EPICHandbook)
+## maybe str(EPICHandbook) ; plot(EPICHandbook) ...
+}
+\keyword{datasets}
+
+EPICHandbook <- function() {'hello world'}
