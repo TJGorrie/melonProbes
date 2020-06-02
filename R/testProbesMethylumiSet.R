@@ -9,7 +9,7 @@ setMethod( f="testProbes",
                                 nbCount = 3, nbThresh = 0.05, pvCount = 0.05, pvThresh = 0.01, nvarThresh = 0.05)
             {
 #betas of MethylumiSet object            
-  bet <- getBeta(betas)
+  bet <- betas(betas)
 #probe types column name
   ds <- fot(betas)
   ot <- betas@featureData@data[,ds]
