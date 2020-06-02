@@ -1,9 +1,9 @@
 testProbes(betas(myset), ot=ot)-> x
 
-#testProbes Methylumi (MethylumiSet)
+#testProbes MethyLumi (MethyLumiSet)
 
 setMethod( f="testProbes",
-          signature(betas="MethylumiSet"),
+          signature(betas="MethyLumiSet"),
           definition = function(betas,manifest = c('450k', 'EPIC'), beadcounts = NULL, detection = NULL, 
                                 nb = .2, np = .2, nvar =.5, ot,
                                 nbCount = 3, nbThresh = 0.05, pvCount = 0.05, pvThresh = 0.01, nvarThresh = 0.05)
