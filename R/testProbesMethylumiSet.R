@@ -1,4 +1,4 @@
-testProbes(betas(myset), ot=ot)-> x
+#testProbes(betas(myset), ot=ot)-> x
 
 #testProbes MethyLumi (MethyLumiSet)
 

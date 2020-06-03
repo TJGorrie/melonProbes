@@ -2,8 +2,6 @@
 #' @aliases EPICHandbook, EPIC, MelonProbes, melonprobes
 #'@description There are 865918 Infinium Human DNA Metylation EPIC array probes and 9 variables
 #'
-#'@docType {data}
-#
 #'@param Zhou_HG19: Logical vector shows which probe presents in Zhou's probelist and match on HG19 human reference genome
 #'@param Zhou_GH38: Logical vector represents probes which can be found on Zhou's probelist and map on HG38 human assembly
 #'@param Pidsley_CrossReactive: Logical vector depicts as TRUE when the probe has multiple bindind affinity determined by Pidsley et al.
@@ -19,11 +17,4 @@
 #'@references Pidsley, R., Zotenko, E., Peters, T. J., Lawrence, M. G., Risbridger, G. P., Molloy, P., Van Djik, S., Muhlhausler, B., Stirzaker, C. and Clark, S. J. (2016) Critical evaluation of the Illumina MethylationEPIC BeadChip microarray for whole-genome DNA methylation profiling.Genome Biol, 17, 208.
 #'@references Zhou, W., Laird, P. W. and Shen, H. (2017) Comprehensive characterization, annotation and innovative use of Infinium DNA methylation BeadChip probes. Nucleic Acids Res, 45, e22.
 #' 
-#'NULL
-#'
-#'
-
-
-
-MelonProbes450kHandbook <- functıon(){'hello world'}
-EPICHandbook <- function(){'hello!'}
+NULL

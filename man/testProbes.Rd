@@ -4,21 +4,10 @@
 \alias{testProbes}
 \title{Test Illumina CpG Probes for potential issues}
 \usage{
-testProbes(
-  betas,
-  manifest = c("450k", "EPIC"),
-  beadcounts = NULL,
-  detection = NULL,
-  nb = 0.2,
-  np = 0.2,
-  nvar = 0.5,
-  ot,
-  nbCount = 3,
-  nbThresh = 0.05,
-  pvCount = 0.05,
-  pvThresh = 0.01,
-  nvarThresh = 0.05
-)
+testProbes(betas, manifest = c("450k", "EPIC"), beadcounts = NULL,
+  detection = NULL, nb = 0.2, np = 0.2, nvar = 0.5, ot,
+  nbCount = 3, nbThresh = 0.05, pvCount = 0.05, pvThresh = 0.01,
+  nvarThresh = 0.05)
 }
 \arguments{
 \item{betas}{A matrix contain beta values, or a RGChannelSetExtended, or a methylumiset}
