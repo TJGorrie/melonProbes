@@ -4,14 +4,16 @@
 \name{melonProbes450k}
 \alias{melonProbes450k}
 \title{Dataframe containing potentially bad probes for 450K microarray data}
-\format{A data frame with 800,000 rows and 9 variables:
+\format{
+A data frame with 800,000 rows and 9 variables:
 \describe{
   \item{Zhou_HG19}{Logical Vector of CpGs that are marked TRUE in Zhou's General Masking column for HG19}
   \item{Zhou_HG38}{Logical Vector of CpGs that are marked TRUE in Zhou's General Masking column for HG38}
   \item{PercLowVariation}{Numeric Vector describing the number of times a CpG is ranked in bottom 5th percentile of variation}
   \item{PercBadBc}{Numeric Vector describing the number of times a CpG has a beadcount  4 in 5 of samples.}
   \item{PercBadPv}{Numeric Vector describing the number of times a CpG has a detection p value  0.05 in 1 of samples.}	
-}}
+}
+}
 \source{
 \url{http://zwdzwd.github.io/InfiniumAnnotation}
         

@@ -17,5 +17,4 @@
 #' @seealso before using this package, please read these articles to understand variables better
 #' @references Pidsley, R., Zotenko, E., Peters, T. J., Lawrence, M. G., Risbridger, G. P., Molloy, P., Van Djik, S., Muhlhausler, B., Stirzaker, C. and Clark, S. J. (2016) Critical evaluation of the Illumina MethylationEPIC BeadChip microarray for whole-genome DNA methylation profiling.Genome Biol, 17, 208.
 #' @references Zhou, W., Laird, P. W. and Shen, H. (2017) Comprehensive characterization, annotation and innovative use of Infinium DNA methylation BeadChip probes. Nucleic Acids Res, 45, e22.
-roxygen2::roxygenise()
 #' 
