@@ -36,8 +36,19 @@ setMethod( f="testProbes",
              nb = .2, np = .2, nvar =.5, ot=ot,
              nbCount = 3, nbThresh = 0.05, pvCount = 0.05, pvThresh = 0.01, nvarThresh = 0.05)
 
+
+
+history.submitted <- as.character(Sys.time())
+history.finished <-as.character(Sys.time())
+history.command <- "Filtered by testProbes method (melonProbes)"
+betas@history <- rbind(betas@history, data.frame( 
+  submitted = history.submitted,
+  finished = history.finished,
+  command = history.command))
+
 fData(betas) <- cbind(fData(betas),out)
 return(betas)
+
 })
 
 
