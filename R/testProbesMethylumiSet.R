@@ -1,4 +1,3 @@
-#testProbes(betas(myset), ot=ot)-> x
 
 #testProbes MethyLumi (MethyLumiSet)
 
@@ -23,12 +22,7 @@ setMethod( f="testProbes",
       message("No beadCount available")
   
   }
-  
-  
-  # beadc<-function(x){
-  #length(which(is.na(x)=="TRUE"))}  not working for methylumiSet
 
-  
   
 #detection 
   pv <- betas@assayData$pval
