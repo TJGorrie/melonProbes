@@ -19,7 +19,7 @@ setMethod( f="testProbes",
     bc[bc<3] <- NA
   } else { 
     bc       <- NULL
-      message("No beadCount available")
+      message("No beadCounts available")
   
   }
 

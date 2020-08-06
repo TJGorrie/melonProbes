@@ -16,13 +16,13 @@ setMethod(f= "testProbes",
                 ot <- got(betas)
                 
                 #beadcount ??
-                beadc<-function(x){
-                length(which(is.na(x)=="TRUE"))}  
-                beadcount <- beadc(betas)
+                beadcount <- NULL
+                message("No beadCounts available")
+                
                 #detectionP
                 dp <- detectionP(betas)
                 
-                out <- testProbes(betas=betRG,manifest = c('450k', 'EPIC'), beadcounts = beacount, detection = dp, 
+                out <- testProbes(betas=betRG,manifest = c('450k', 'EPIC'), beadcounts = beadcount, detection = dp, 
                            nb = .2, np = .2, nvar =.5, ot=ot,
                            nbCount = 3, nbThresh = 0.05, pvCount = 0.05, pvThresh = 0.01, nvarThresh = 0.05)  
             
