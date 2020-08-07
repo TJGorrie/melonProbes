@@ -15,12 +15,15 @@ setMethod(f= "testProbes",
                 #ot
                 ot <- got(betas)
                 
+                
                 #beadcount ??
                 beadcount <- NULL
                 message("No beadCounts available")
                 
                 #detectionP
                 dp <- detectionP(betas)
+                
+                merge(ot, dp)
                 
                 out <- testProbes(betas=betRG,manifest = c('450k', 'EPIC'), beadcounts = beadcount, detection = dp, 
                            nb = .2, np = .2, nvar =.5, ot=ot,
