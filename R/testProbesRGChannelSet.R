@@ -9,11 +9,13 @@ setMethod(f= "testProbes",
             nb = .2, np = .2, nvar =.5, ot,
             nbCount = 3, nbThresh = 0.05, pvCount = 0.05, pvThresh = 0.01, nvarThresh = 0.05)
         
-              { #betas of object
-                betRG <- getBeta(betas)
+              { betasP <- preprocessRaw(betas)
+            
+                #betas of object
+                betRG <- getBeta(betasP)
                 
                 #ot
-                ot <- got(betas)
+                ot <- got(betasP)
                 
                 
                 #beadcount ??
@@ -23,7 +25,7 @@ setMethod(f= "testProbes",
                 #detectionP
                 dp <- detectionP(betas)
                 
-                merge(ot, dp)
+                
                 
                 out <- testProbes(betas=betRG,manifest = c('450k', 'EPIC'), beadcounts = beadcount, detection = dp, 
                            nb = .2, np = .2, nvar =.5, ot=ot,
