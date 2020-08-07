@@ -6,5 +6,5 @@ Description: Test for potentially problematic probes in DNA methylation microarr
 Depends: R (>= 3.5.0), Biobase, methods, wateRmelon, minfi, methylumi
 License:
 LazyData: true
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
 Encoding: UTF-8
