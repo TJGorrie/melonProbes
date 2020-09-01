@@ -1,0 +1,184 @@
+---
+title: "The melonProbes Package"
+author: "Gizem Alishkan"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{The melonProbes Package}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Abstract {#anchor}
+  
+  
+  DNA methylation is a well-studied epigenetic mark on the genome. This modification is used in epigenome-wide association studies promising improvement to our understanding of many diseases, profiled by DNA methylation arrays -the Illumina Infinium 450K and EPIC(850K) methylation arrays are the most common ones- with high-quality results and large sample sizes, coupled with decreasing costs and increasing coverage of DNA methylation microarrays. There are various software tools (minfi, methylumi, wateRmelon, bigmelon,..) and statistical methods to analyse pipelines and to process microarray data. Each package contains many tools for a more in-depth analysis. MelonProbes is one of those packages specialised for filtering bad and low-quality probes by statistical methods. MelonProbes is being developed using object-oriented programming which enables user-friendly, flexible and nicely implemented tools. MelonProbes aims to filter 
+probes by their bead counts, beta values, detection p-values and other parameters.
+  
+
+## Introduction
+  
+  
+  DNA methylation is defined as the addition of methyl group (CH~3~) to a CG dinucleotide of the DNA (Jones, 2012) and widely studied under epigenomic wide associated studies due to its importance on development and diseases. The most frequent type of DNA methylation in human is 5-methylcytosine (5mC) which affects 70-80% of Cytosines followed by Guanines (CpGs) in the genome (Ehrlich et al., 1982). It can be analysed by several way but Illumina HumanMethylation450 array and MethylationEPIC array dominate the epigenetic community. HumanMethylation450 and MethylationEPIC arrays contain more than 450,000 and 850,000 probes, respectively. EPIC array covers more than 90% of 450K array content and has comprehensive genome-wide coverage (Pidsley et al., 2016). 
+  
+  These arrays use two different types of chemical assays-Infinium I and Infinium II. The Infinium I and II probes are 50 base pair in length which detect methylation of bisulfite treated DNA with different mechanisms. Infinium I array uses paired probe technology designed for each CpG, one for methylated and the other one for unmethylated sequence. On the other hand, the Infinium type II array technology consists of only one probe with red or green fluorescence-labelled single base extension pairing with cytosine or thymidine of the hybridized genomic DNA molecule. The Infinium I array approach a single-channel microarray. However, the Infinium II assay has a two-colour readout. The difference in chemistries of Infinium type I and II probes need to be taken consideration during data processing. Therefore, it is strongly recommended that filtering out probes which are cross-reactive probes or common single nucleotide polymorphisms (SNPs) containing probes or displaying high average intensities during data preprocessing. 
+  
+  The percentage of 8.6-25 of the Infinium HumanMethylation450 probes have been classified as non-specific or cross-reactive (Price et al., 2013; Zhang et al., 2012). These probes are problematic because they are likely to co-hybridize with non-specific CpG sites and tend to result in wrong methylation measurements. 
+  
+  Some (4.3%) of Infinium HumanMethylation450K probes overlap common single nucleotide polymorphisms on the genome. Genetic polymorphism of underlining sequence can affect signal intensities of arrays (Chen et al., 2013).   Arrays are likely to represent genotype of sample rather than actual DNA methylation level of targeted CpG sites. Therefore, to filter out probes containing common SNPs is important for array analysis. 
+  
+  Both cross-reactive and SNPs containing probes can cause potential invalid and spurious results. However, there are other probes that can cause problems. Some probes have high-intensity of β-values (defined as a ratio of methylated signal over total signal of methylated+unmethylated+100) which is close to 0.5. These probes have a tendency to result inconsistent DNA methylation levels when compared with other approaches (Dedeurwaerder et al., 2014). It is suggesting that probes representing high intensities from any parameter should be filtered out before downstream analysis. To do that,  we have used Pidsley’s (Pidsley et al., 2016) cross-reactive and SNP overlapping probe lists to filter problematic probes based on their β-values, detection p-values and bead counts. MelonProbes is designed as user-friendly and easy to manipulate. 
+  
+  The input data to this package can be **RGChannelSet**, **RGChannelsetExtended** or **Methylumiset** objects, or **β-values**. RGChannelSet and RGChannelsetExtended object comes from minfi package and Methylumiset object is derived from methylumi package. 
+
+
+### Working with melonProbes
+
+1.Installation
+  
+  For installation of melonProbes package, devtools package should be installed. You can install both devtools and melonProbes packages by using following commands:
+  
+```{r setup, eval=FALSE}
+if(!requireNamespace("devtools", quietly = TRUE))
+  +install.packages("devtools")
+devtools::install_github("gizemaliskan/melonProbes")
+
+```
+
+2.Trying it out
+```{r, eval=FALSE}
+library(melonProbes)
+```
+
+3.testProbes
+
+It is the only function of melonProbes package. It has function to test Illumina HumanMethylation BeadChip microarray probes for potential issues.
+
+
+```{r, eval=FALSE}
+testProbes(betas, manifest = c("450k", "EPIC"), beadcounts = NULL, detection = NULL, nb = 0.2, np = 0.2, nvar = 0.5, ot, nbCount = 3, nbThresh = 0.05, pvCount = 0.05, pvThresh = 0.01, nvarThresh = 0.05)
+
+```
+
+
+Parameters: 
+    
+
+**Betas** β-values are calculated using the formula: β = intensity of the methylated signal/(intensity of the unmethylated signal + intensity of the methylated signal + 100). β-values represents unmethylated CpG site when it is 0 value and fully methylated CpG site when it is equal to 1.
+  
+**Bead counts** Microarrays contain thousands of beads and each bead is coated with multiple copies of an oligonucleotide probe which DNA sequences can hybridise. Increasing the number of beads in array also results in more reliable signals from that probe. Therefore, in practice, any signal lower than certain threshold or signal has lower proportion compared to the total number of samples means that probe is failed. Default parameter is NULL which contains bead counts. Bead counts values are used in calculation of nb.   
+    
+**Detection** p-values represents error of signal obtained from a probe to the background signal. Bead counts and detection p-values in testProbes function are set to NULL. These values are going to be used in calculations of np parameters. 
+    
+**nb** is the percentage of dataset a probe has failed in bead counts. The threshold for nb is 0.2 meaning that probes failed in more than 20% of datasets will be filtered out. 
+
+**np** is the percentage of dataset a probe has failed in detection p-value. Probes failed in more than 20% of datasets in terms of detection p-values will be filtered out. 
+    
+**nvar** sample variance is used to filter out low variance having probes. Normally, variation of probes in the CpG site between samples are expected. Certain CpG sites have high variation in some diseases and different tissue types and low variation on these sites need to be explored. Nvar parameter is adjusted 0.5 which means probes showing low variation more than 50% of the time are removed. The message stated “# of # are ranked in the bottom 5th percentile of type I/II probes.”  clarifies how many type I and type II probes were determined within the 5%. 
+
+**ot** is character vector representing types of probes as I or II. 
+
+**nbCount** is physical bead counts to test probes determined as lower than 3. 
+    
+**nbThresh** is proportion of sample. TestProbes function filter out probes when nbCount <3 in nbTresh > 5% of samples. 
+
+**pvCount** is the detection p-value to test probes. Default is 0.05 (5%).
+
+**pvThresh** is detection p-value threshold with a corresponding to > 0.01 value. Probes are failed when shows > 0.05 detection p-value in > 1% of samples. 
+
+**nvarThresh** is density of variation a probe can be in. 
+
+#### Examples of testProbes methods
+
+* beta-values
+
+```{r, eval=FALSE}
+library(wateRmelon)
+library(minfi)
+library(melonProbes)
+
+data("melon")
+
+betas <- betas(melon)
+
+test_melon <- testProbes(betas, ot = ot)
+```
+    
+    ## 0 of 18 are ranked in the bottom 5th percentile of Type I probes.
+    ## 0 of 61 are ranked in the bottom 5th percentile of Type II probes.
+
+* RGChannelSetExtended
+
+```{R, eval= FALSE}
+library(minfiData)
+library(melonProbes)
+
+toydat <- RGsetEx.sub
+
+class(toydat) <- "RGChannelSetExtended"
+
+nbeads <- matrix(as.integer(rnorm(1938,mean=5, sd=1)), 1938,6)
+
+nbeads[nbeads<0] <-0
+
+assays(toydat, withDimnames= FALSE)$NBeads <- nbeads
+
+test_ToyData <- testProbes(toydat)
+
+```
+
+    ## No beadCounts available
+    ## 148 of 250 have a detection p > 0.05 in more than 1% of samples.
+    ## 0 of 0 are ranked in the bottom 5th percentile of Type I probes.
+    ## 0 of 0 are ranked in the bottom 5th percentile of Type II probes.
+
+* MethylumiSet
+
+```{r, eval=FALSE}
+library(melonProbes)
+library(wateRmelon)
+
+data("melon")
+
+test_melon <- testProbes(melon)
+```
+      
+    ## No beadCounts available
+    ## 0 of 18 are ranked in the bottom 5th percentile of Type I probes.
+    ## 0 of 61 are ranked in the bottom 5th percentile of Type II probes.
+
+* RGChannelSet 
+
+```{r, eval=FALSE}
+library(minfiData)
+library(melonProbes)
+
+data("RGsetEx")
+
+test_RG <- testProbes(RGsetEx)
+```
+ 
+    ## No beadCounts available
+    ## 144 of 4998 have a detection p > 0.05 in more than 1% of samples.
+    ## 131 of 2917 are ranked in the bottom 5th percentile of Type I probes.
+    ## 131 of 6951 are ranked in the bottom 5th percentile of Type II probes
+    
+##### Further analysis
+
+###### References
+
+   Chen, Y. A., Lemire, M., Choufani, S., Butcher, D. T., Grafodatskaya, D., Zanke, B. W., Gallinger, S., Hudson, T. J. and Weksberg, R. (2013) Discovery of cross-reactive probes and polymorphic CpGs in the Illumina Infinium HumanMethylation450 microarray. Epigenetics, 8, 203-9.
+
+  Ehrlich, M., Gama-Sosa, M. A., Huang, L. H., Midgett, R. M., Kuo, K. C., McCune, R. A. and Gehrke, C. (1982) Amount and distribution of 5-methylcytosine in human DNA from different types of tissues of cells. Nucleic Acids Res, 10, 2709-21.
+
+   Jones, P. A. (2012) Functions of DNA methylation: islands, start sites, gene bodies and beyond. Nat Rev Genet, 13, 484-92.Chen, Y. A., Lemire, M., Choufani, S., Butcher, D. T., Grafodatskaya, D., Zanke, B. W., Gallinger, S., Hudson, T. J. and Weksberg, R. (2013) Discovery of cross-reactive probes and polymorphic CpGs in the Illumina Infinium HumanMethylation450 microarray. Epigenetics, 8, 203-9.
+    
+  Dedeurwaerder, S., Defrance, M., Bizet, M., Calonne, E., Bontempi, G. and Fuks, F. (2014) A comprehensive overview of Infinium HumanMethylation450 data processing. Brief Bioinform, 15, 929-41.
+    
+  Pidsley, R., Zotenko, E., Peters, T. J., Lawrence, M. G., Risbridger, G. P., Molloy, P., Van Djik, S., Muhlhausler, B., Stirzaker, C. and Clark, S. J. (2016) Critical evaluation of the Illumina MethylationEPIC BeadChip microarray for whole-genome DNA methylation profiling. Genome Biol, 17, 208.
+    
+   Price, M. E., Cotton, A. M., Lam, L. L., Farré, P., Emberly, E., Brown, C. J., Robinson, W. P. and Kobor, M. S. (2013) Additional annotation enhances potential for biologically-relevant analysis of the Illumina Infinium HumanMethylation450 BeadChip array. Epigenetics Chromatin, 6, 4.
+    
+  Zhang, X., Mu, W. and Zhang, W. (2012) On the analysis of the illumina 450k array data: probes ambiguously mapped to the human genome. Front Genet, 3, 73.
+
+
+
