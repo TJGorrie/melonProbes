@@ -8,10 +8,11 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-# Abstract {#anchor}
+# Abstract 
   
   
   DNA methylation is a well-studied epigenetic mark on the genome. This modification is used in epigenome-wide association studies promising improvement to our understanding of many diseases, profiled by DNA methylation arrays -the Illumina Infinium 450K and EPIC(850K) methylation arrays are the most common ones- with high-quality results and large sample sizes, coupled with decreasing costs and increasing coverage of DNA methylation microarrays. There are various software tools (minfi, methylumi, wateRmelon, bigmelon,..) and statistical methods to analyse pipelines and to process microarray data based on R and Bioconductor. Each package contains many tools for a more in-depth analysis. MelonProbes is one of those packages specialised for filtering bad and low-quality probes for potential problems. MelonProbes is being developed using S4 object-oriented programming which enables user-friendly, flexible and nicely implemented tools. MelonProbes aims to filter probes by their bead counts, beta values, detection p-values and other parameters.
+
   
 
 ## Introduction
@@ -38,7 +39,7 @@ vignette: >
   
 ```{r setup, eval=FALSE}
 if(!requireNamespace("devtools", quietly = TRUE))
-  +install.packages("devtools")
+  install.packages("devtools")
 devtools::install_github("gizemaliskan/melonProbes")
 
 ```
@@ -49,80 +50,74 @@ melonProbes package depends on minfi, methylumi,wateRmelon, Biobase, and methods
 
 
 3.Trying it out
+
 ```{r, eval=FALSE}
 library(melonProbes)
 ```
 
+
 #### testProbes
 
-It is the only function of melonProbes package. It has function to test Illumina HumanMethylation BeadChip microarray probes for potential issues.
+It is the only function of melonProbes package. It has function to test Illumina HumanMethylation BeadChip microarray probes for potential issues. The testProbes function can works with  **RGChannelSet**, **RGChannelsetExtended**and **Methylumiset** classes, and **β-values**. 
 
 
 ```{r, eval=FALSE}
+#Generic Function
+
 testProbes(betas, manifest = c("450k", "EPIC"), beadcounts = NULL, detection = NULL, nb = 0.2, np = 0.2, nvar = 0.5, ot, nbCount = 3, nbThresh = 0.05, pvCount = 0.05, pvThresh = 0.01, nvarThresh = 0.05)
 
 ```
 
-
-Parameters: 
- 
-**Attention** We strongly recommend to melonProbes users to modify testProbes function parameters according to their data's nature for more comprehensive and precise analysis.
-
-**Betas** β-values are calculated using the formula: β = intensity of the methylated signal/(intensity of the unmethylated signal + intensity of the methylated signal + 100). β-values represents unmethylated CpG site when it is 0 value and fully methylated CpG site when it is equal to 1.
-  
-**Bead counts** Microarrays contain thousands of beads and each bead is coated with multiple copies of an oligonucleotide probe which DNA sequences can hybridise. Increasing the number of beads in array also results in more reliable signals from that probe. Therefore, in practice, any signal lower than certain threshold or signal has lower proportion compared to the total number of samples means that probe is failed. Default parameter is NULL which contains bead counts. Bead counts values are used in calculation of nb.   
-    
-**Detection** p-values represents error of signal obtained from a probe to the background signal. Bead counts and detection p-values in testProbes function are set to NULL. These values are going to be used in calculations of np parameters. 
-    
-**nb** is the percentage of dataset a probe has failed in bead counts. The threshold for nb is 0.2 meaning that probes failed in more than 20% of datasets will be filtered out. 
-
-**np** is the percentage of dataset a probe has failed in detection p-value. Probes failed in more than 20% of datasets in terms of detection p-values will be filtered out. 
-    
-**nvar** sample variance is used to filter out low variance having probes. Normally, variation of probes in the CpG site between samples are expected. Certain CpG sites have high variation in some diseases and different tissue types and low variation on these sites need to be explored. Nvar parameter is adjusted 0.5 which means probes showing low variation more than 50% of the time are removed. The message stated “# of # are ranked in the bottom 5th percentile of type I/II probes.”  clarifies how many type I and type II probes were determined within the 5%. 
-
-**ot** is character vector representing types of probes as I or II. 
-
-**nbCount** is physical bead counts to test probes determined as lower than 3. 
-    
-**nbThresh** is proportion of sample. TestProbes function filter out probes when nbCount <3 in nbTresh > 5% of samples. 
-
-**pvCount** is the detection p-value to test probes. Default is 0.05 (5%).
-
-**pvThresh** is detection p-value threshold with a corresponding to > 0.01 value. Probes are failed when shows > 0.05 detection p-value in > 1% of samples.For detection p-value containing objects, testProbes function shows a message of "# of # have a detection p > 0.05 in more than 1% of samples." to inform the investigators about how many probes failed in detection p-value. 
-
-**nvarThresh** is density of variation a probe can be in. 
-
-
-##### Understanding return objects
-
-  The testProbes function produces a logical list of analysis representing which probes failed in and the list is stored differently in different object classes.TRUEs are for failed probes. 
-  
-  * Beta values: when the input data is beta values, the return object is a logical list of probes.
-  
-  * RGChannelSetExtended: the return is the list of both testhProbes and detection P value analysis.
-  
-  * MethylumiSet: the return is methylumiSet class object. Analysis is stored under featureData@data$Variation.
-  
-  * RGChannelSet: if input data class is RGChannelSet, the return object is a logical list of testProbes and detection P value analysis. 
-
 ###### Examples of testProbes methods
 
-* beta-values
+
+  * Raw data object class from minfi (RGChannelSet) 
+
+```{r, eval=FALSE}
+library(minfiData)
+library(melonProbes)
+
+data("RGsetEx") #RGChannelSet class dataset from minfiData
+
+test_RG <- testProbes(RGsetEx)
+```
+ 
+
+     No beadCounts available
+     144 of 4998 have a detection p > 0.05 in more than 1% of samples.
+     131 of 2917 are ranked in the bottom 5th percentile of Type I probes.
+     131 of 6951 are ranked in the bottom 5th percentile of Type II probes
+    
+```{r, eval=FALSE}
+head(test_RG)
+```
+
+               DetectionP Variation
+    cg00050873      FALSE     FALSE
+    cg00212031      FALSE     FALSE
+    cg00213748      FALSE     FALSE
+    cg00214611      FALSE     FALSE
+    cg00455876      FALSE     FALSE
+    cg01707559      FALSE     FALSE
+    
+  * Generic method
 
 ```{r, eval=FALSE}
 library(wateRmelon)
 library(methylumi)
 library(melonProbes)
 
-data("melon")
+data("melon") #Sample methylumiSet class dataset from wateRmelon package
 
-betas <- betas(melon)
+betas <- betas(melon) #extracting beta values from melon object
 
 test_betas <- testProbes(betas, ot = ot)
 ```
     
-     0 of 18 are ranked in the bottom 5th percentile of Type I probes.
-     0 of 61 are ranked in the bottom 5th percentile of Type II probes.
+     0 of 18 are ranked in the bottom 5th percentile of Type I probes. 
+     0 of 61 are ranked in the bottom 5th percentile of Type II probes. 
+     
+     #how many type I and type II show low variation 
 
 ```{r, eval=FALSE}
 head(test_betas)
@@ -137,12 +132,13 @@ head(test_betas)
     cg00000289     FALSE
 
 
-
-* RGChannelSetExtended
+* Raw data object class from minfi (RGChannelSetExtended)
 
 ```{R, eval= FALSE}
 library(minfiData)
 library(melonProbes)
+
+#generating a sample dataset for RGChannelSetExtended class
 
 toydat <- RGsetEx.sub
 
@@ -177,13 +173,13 @@ head(test_ToyData)
 
 
 
-* MethylumiSet
+* MethylumiSet class
 
 ```{r, eval=FALSE}
 library(melonProbes)
 library(wateRmelon)
 
-data("melon")
+data("melon") #sample methylumiSet class dataset from wateRmelon package
 
 test_melon <- testProbes(melon)
 ```
@@ -221,33 +217,63 @@ head(test_melon)
 
 
 
-* RGChannelSet 
 
+
+
+
+**Attention** We strongly recommend to melonProbes users to modify testProbes function parameters according to their data's nature for more comprehensive and precise analysis.
+
+
+#### Parameters: 
+ 
+
+**Betas** It is the beta values containing matrix for generic function but it can be methylumiSet and raw data objects from minfi either RGChannelSet or RGChannelSetExtended. 
+  
+**Bead counts** Microarrays contain thousands of beads and each bead is coated with multiple copies of an oligonucleotide probe which DNA sequences can hybridise. Increasing the number of beads in array also results in more reliable signals from that probe. Therefore, in practice, any signal lower than certain threshold or signal has lower proportion compared to the total number of samples means that probe is failed. Default parameter is NULL which contains bead counts. Bead counts values are used in calculation of nb.   
+    
+**Detection** p-values represents error of signal obtained from a probe to the background signal. Bead counts and detection p-values in testProbes function are set to NULL. These values are going to be used in calculations of np parameters. 
+    
+**nb** is the percentage of dataset a probe has failed in bead counts. The threshold for nb is 0.2 meaning that probes failed in more than 20% of datasets will be filtered out. 
+
+**np** is the percentage of dataset a probe has failed in detection p-value. Probes failed in more than 20% of datasets in terms of detection p-values will be filtered out. 
+    
+**nvar** sample variance is used to filter out low variance having probes. Normally, variation of probes in the CpG site between samples are expected. Certain CpG sites have high variation in some diseases and different tissue types and low variation on these sites need to be explored. Nvar parameter is adjusted 0.5 which means probes showing low variation more than 50% of the time are removed. The message stated “# of # are ranked in the bottom 5th percentile of type I/II probes.”  clarifies how many type I and type II probes were determined within the 5%. 
+
+**ot** is character vector representing types of probes as I or II. 
+
+**nbCount** is physical bead counts to test probes determined as lower than 3. 
+    
+**nbThresh** is proportion of sample. TestProbes function filter out probes when nbCount <3 in nbTresh > 5% of samples. 
+
+**pvCount** is the detection p-value to test probes. Default is 0.05 (5%).
+
+**pvThresh** is detection p-value threshold with a corresponding to > 0.01 value. Probes are failed when shows > 0.05 detection p-value in > 1% of samples.For detection p-value containing objects, testProbes function shows a message of "# of # have a detection p > 0.05 in more than 1% of samples." to inform the investigators about how many probes failed in detection p-value. 
+
+**nvarThresh** is density of variation a probe can be in. 
+
+
+##### Understanding return objects
+
+  The testProbes function produces a logical list of analysis representing which probes failed in and the list is stored differently in different object classes.TRUEs are for failed probes. 
+  
+  * Beta values: when the input data is beta values, the return object is a logical list of probes.
+  
+  * RGChannelSetExtended: the return is the list of both testhProbes and detection P value analysis.
+  
+  * MethylumiSet: the return is methylumiSet class object. Analysis is stored under featureData@data$Variation.
+  
+  * RGChannelSet: if input data class is RGChannelSet, the return object is a logical list of testProbes and detection P value analysis. 
+  
+  The testProbes function does not remove out failed probes automatically. The users can remove bad or problematic probes by subsetting the object. Here, there is an example of removing problematic probes:
+  
 ```{r, eval=FALSE}
 library(minfiData)
 library(melonProbes)
 
-data("RGsetEx")
-
-test_RG <- testProbes(RGsetEx)
+data("RGsetEx")  #Raw data (RGChannelSet) class sample dataset from minfiData package
+test <- testProbes(RGsetEx)
+testvar <- test[which(test$Variation==FALSE & test$DetectionP==FALSE),]
 ```
- 
-     No beadCounts available
-     144 of 4998 have a detection p > 0.05 in more than 1% of samples.
-     131 of 2917 are ranked in the bottom 5th percentile of Type I probes.
-     131 of 6951 are ranked in the bottom 5th percentile of Type II probes
-    
-```{r, eval=FALSE}
-head(test_RG)
-```
-
-               DetectionP Variation
-    cg00050873      FALSE     FALSE
-    cg00212031      FALSE     FALSE
-    cg00213748      FALSE     FALSE
-    cg00214611      FALSE     FALSE
-    cg00455876      FALSE     FALSE
-    cg01707559      FALSE     FALSE
 
 
 
