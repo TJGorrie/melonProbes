@@ -8,10 +8,11 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-# Abstract {#anchor}
+# Abstract 
   
   
   DNA methylation is a well-studied epigenetic mark on the genome. This modification is used in epigenome-wide association studies promising improvement to our understanding of many diseases, profiled by DNA methylation arrays -the Illumina Infinium 450K and EPIC(850K) methylation arrays are the most common ones- with high-quality results and large sample sizes, coupled with decreasing costs and increasing coverage of DNA methylation microarrays. There are various software tools (minfi, methylumi, wateRmelon, bigmelon,..) and statistical methods to analyse pipelines and to process microarray data based on R and Bioconductor. Each package contains many tools for a more in-depth analysis. MelonProbes is one of those packages specialised for filtering bad and low-quality probes for potential problems. MelonProbes is being developed using S4 object-oriented programming which enables user-friendly, flexible and nicely implemented tools. MelonProbes aims to filter probes by their bead counts, beta values, detection p-values and other parameters.
+
   
 
 ## Introduction
@@ -49,9 +50,11 @@ melonProbes package depends on minfi, methylumi,wateRmelon, Biobase, and methods
 
 
 3.Trying it out
+
 ```{r, eval=FALSE}
 library(melonProbes)
 ```
+
 
 #### testProbes
 
@@ -107,11 +110,14 @@ Parameters:
 
 ###### Examples of testProbes methods
 
+
 * beta-values
 
 ```{r, eval=FALSE}
 library(wateRmelon)
+
 library(methylumi)
+
 library(melonProbes)
 
 data("melon")
@@ -135,7 +141,6 @@ head(test_betas)
     cg00000165     FALSE
     cg00000236     FALSE
     cg00000289     FALSE
-
 
 
 * RGChannelSetExtended
@@ -232,6 +237,7 @@ data("RGsetEx")
 test_RG <- testProbes(RGsetEx)
 ```
  
+
      No beadCounts available
      144 of 4998 have a detection p > 0.05 in more than 1% of samples.
      131 of 2917 are ranked in the bottom 5th percentile of Type I probes.
