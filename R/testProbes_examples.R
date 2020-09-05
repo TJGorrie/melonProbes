@@ -1,24 +1,24 @@
 #testProbes methods examples
 
-#Beta
+#Generic function
 
-data("RGsetEx") #minfiData
+data("RGsetEx") #from minfiData
 
-preprocessed.RGsetEx <- preprocessRaw(RGsetEx)
+preprocessed.RG <- preprocessRaw(RGsetEx) #converting Red/Green channel into methylation signal
 
-beta.RGsetEx <- getBeta(preprocessed.RGsetEx)
+beta.RGsetEx <- getBeta(preprocessed.RG) #extracting beta-values from object
 
-testProbes.RGsetEx <- testProbes(beta.RGsetEx, ot=ot)
+testRG <- testProbes(beta.RGsetEx, ot=ot) 
 
 #Return is a logical list of Variation for each probe. TRUEs are for failed probes. 
 
-#RGChannelSetExtended
+#Raw data object of minfi (RGChannelSetExtended)
 
-toydat <- RGsetEx.sub #minfiData
+toydat <- RGsetEx.sub #from minfiData
 
-class(toydat) <- "RGChannelSetExtended"
+class(toydat) <- "RGChannelSetExtended" #generating simple RGChannelSetExtended object
 
-nbeads <- matrix(as.integer(rnorm(1938,mean=5, sd=1)), 1938,6)
+nbeads <- matrix(as.integer(rnorm(1938,mean=5, sd=1)), 1938,6) #adding bead counts into the object
 
 nbeads[nbeads<0] <-0
 
@@ -26,24 +26,21 @@ assays(toydat, withDimnames= FALSE)$NBeads <- nbeads
 
 test_Toydata <- testProbes(toydat)
 
-#Return is logical list of detectionP and Variation. TRUEs for failed probes
+#Return is a logical list of detectionP and Variation. TRUEs for failed probes
 
-#MethylumiSet
+#Raw data object of Methylumi (MethylumiSet)
 
-data(melon) #wateRmelon
+data(melon) #from wateRmelon
  
 testPmelon <- testProbes(melon)
 
 #Return is methylumiSet object and analysis can be seen under testPmelon@featureData@data[["Variation"]]
 
-#RGChannel
+#Raw data object of minfi (RGChannel)
 
-data("RGsetEx") #minfiData
-testRG <- testProbes(RGsetEx)
-
-#Return is logical list of detectionP and Variation. TRUEs for failure
-#RGChannel
-
-data(RGsetEx) #minfiData
+data("RGsetEx") #from minfiData
 
 testRG <- testProbes(RGsetEx)
+
+#Return is a logical list of detectionP and Variation. TRUEs for failure
+
