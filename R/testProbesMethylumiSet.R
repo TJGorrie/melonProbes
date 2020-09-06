@@ -5,10 +5,9 @@ setMethod( f="testProbes",
           signature(betas="MethyLumiSet"),
           definition = function(betas,manifest = c('450k', 'EPIC'), beadcounts = NULL, 
                                 detection = NULL, nb = .2, np = .2, nvar = .5, ot,
-                                nbCount = 3, nbThresh = 0.05, pvCount = 0.05, pvThresh = 0.01,
-                                nvarThresh = 0.05)
-
-            {
+                                nbCount = 3, nbThresh = 0.05, pvCount = 0.05, 
+                                pvThresh = 0.01, nvarThresh = 0.05)
+{
 #betas of MethylumiSet object            
   bet <- betas(betas)
 #probe types column name
@@ -21,17 +20,14 @@ setMethod( f="testProbes",
     bc[bc<3] <- NA
   } else { 
     bc       <- NULL
-      message("No beadCounts available")
-  
-  }
+      message("No beadCounts available")}
 
-  
-#detection 
+  #detection 
   pv <- betas@assayData$pval
-  out <- testProbes(betas=bet,manifest = c('450k', 'EPIC'), beadcounts = bc, detection = pv, 
-             nb = nb, np = np, nvar = nvar, ot=ot,
-             nbCount = nbCount, nbThresh = nbThresh, pvCount = pvCount, pvThresh = pvThresh, nvarThresh = nvarThresh)
-
+  out <- testProbes(betas=bet,manifest = c('450k', 'EPIC'), beadcounts = bc, 
+                    detection = pv, nb = nb, np = np, nvar = nvar, ot=ot,
+                    nbCount = nbCount, nbThresh = nbThresh, pvCount = pvCount, 
+                    pvThresh = pvThresh, nvarThresh = nvarThresh)
 
 
 history.submitted <- as.character(Sys.time())
