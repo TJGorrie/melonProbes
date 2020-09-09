@@ -2,7 +2,7 @@
 % Please edit documentation in R/probeTests.R
 \name{testProbes}
 \alias{testProbes}
-\title{Test Illumina CpG Probes for potential problems}
+\title{Test Illumina CpG Probes for potential issues}
 \usage{
 testProbes(
   betas,
