@@ -18,7 +18,7 @@ setMethod(f= "testProbes",
           ot <- got(betasP)
           
           #beadcount
-          beadcount <- beadcount(betasP)
+          beadcount <- beadcount(betas)
           
           
           #detectionP
