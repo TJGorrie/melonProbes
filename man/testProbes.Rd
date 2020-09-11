@@ -2,7 +2,12 @@
 % Please edit documentation in R/probeTests.R
 \name{testProbes}
 \alias{testProbes}
-\title{Test Illumina CpG Probes for potential issues}
+\alias{methylumi,}
+\alias{methylumiSet,}
+\alias{minfi,}
+\alias{RGChannelSet,}
+\alias{RGChannelSetExtended}
+\title{Test Illumina CpG Probes for potential problems}
 \usage{
 testProbes(
   betas,
@@ -21,41 +26,51 @@ testProbes(
 )
 }
 \arguments{
-\item{betas}{A matrix contain beta values, or a RGChannelSetExtended, or a methylumiset}
+\item{betas}{A matrix contain beta values, or a RGChannelSet(Extended), or a methylumiSet}
 
 \item{manifest}{Specify which manifest to use}
 
-\item{beadcounts}{Default: NULL, provide with a matrix containing beadcounts}
+\item{beadcounts}{Default: NULL, provide with a matrix containing beadcounts. Bead counts values will be used in calculation of nb for each probe.}
 
-\item{detection}{Default: NULL, provide with a matrix containing detection P values}
+\item{detection}{Default: NULL, provide with a matrix containing detection P values.Detection p-values will be used in calculation of np for each probe.}
 
-\item{nb}{A value between 0 and 1, represents the \% of datasets a probe has failed in. Default is 0.2 (20\%) however all probes can be tested by specifing a value of 0.}
+\item{nb}{A value between 0 and 1, the percentage of dataset a probe has failed in bead count. Probes failed in more than 20\% of datasets in terms of bead count will be filtered out. However, all probes can be tested by nb=0.}
 
-\item{np}{A value between 0 and 1, represents the \% of datasets a probe has failed in. Default is 0.2 (20\%) however all probes can be tested by specifing a value of 0.}
+\item{np}{A value between 0 and 1, the percentage of dataset a probe has failed in detection p-value. Probes failed in more than 20\% of datasets in terms of detection p-values will be filtered out. However, all probes can be tested by np=0.}
 
-\item{nvar}{A value between 0 and 1, represents the \% of datasets a probe has failed in. Default is 0.5 (50\%) however all probes can be tested by specifing a value of 0.}
+\item{nvar}{A value between 0 and 1, sample variance is used to filter out low variance having probes. Nvar parameter is adjusted to 0.5 which means the probe showing a low variation for more than 50\% of the time will be failed in test. The last two messages clarify how many type I and type II probes were determined within the 5\% in terms of variation.}
 
-\item{ot}{A character vector describing the probe design for CpGs (must contain 'I' and 'II')}
+\item{ot}{a character vector representing the types of probes as I or II.}
 
-\item{nbCount}{The beadcount to test probes in your dataset against}
+\item{nbCount}{refers to physical bead counts to test the probes determined as lower than 3.}
 
-\item{nbThresh}{The proportion of samples}
+\item{pvCount}{the detection p-value to test probes. Default is 0.05 (5\%).}
 
-\item{pvCount}{The detection p value to test probes in your dataset against}
+\item{pvThresh}{the detection p-value threshold, corresponding to > 0.01 value. Probes are failed when they show > 0.05 detection p-value in > 1\% of samples.}
 
-\item{pvThresh}{The proportion of samples to which a probe can fail in}
+\item{nvarThresh}{the density of variation a probe can be in.}
 
-\item{nvarThresh}{The percentile of variation a probe can be in.}
+\item{nbTresh}{a proportion of the sample. The TestProbes function filters probes when the nbCount is less than 3 (<3) and nbThresh > 5\% of the samples.}
 }
 \value{
-A data.frame of nrow(betas) x 3 columns specifying which probes have failed which tests.
+For minfi package & beta-values: A data.frame of nrow(betas) x 3 columns specifying which probes have failed which tests.
+
+For methylumi package: MethylumiSet object. Analysis is stored under betas@featureData@data$Variation.
 }
 \description{
-Tests Illumina CpGs for potential issues that affect a given proportion of datasets. Useful for removing hits that may be unlikely to be reproduced
+Test Illumina CpG probes for potential problems, useful for removing hits that may be unlikely to be reproduced
 }
 \examples{
-#
+data("melon") #Sample dataset from wateRmelon package
+betas <- betas(melon) #extracting beta values from melon object
+test_betas <- testProbes(betas, ot = ot)
 
+library(minfiData)
+data("RGsetEx")
+test_RG <- testProbes(RGsetEx)
+
+data("melon")
+test_melon <- testProbes(melon)
 }
 \author{
 Tyler Gorrie-Stone \email{tgorri@essex.ac.uk}
