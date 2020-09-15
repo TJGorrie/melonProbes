@@ -230,7 +230,9 @@ test <- testProbes(toydat)
     0 of 0 are ranked in the bottom 5th percentile of Type II probes.
     
 ```{r, eval=FALSE}
-test <- testProbes(toydat, np=0, nb=0, nvar=0) #test all probes in dataset, not only ones we                                                    consider to be bad
+test <- testProbes(toydat, np=0, nb=0, nvar=0) 
+
+#test all probes in dataset, not only ones we consider to be bad
 ```    
 
     83 of 553 have a beadcount <= 3 in more than 5% of samples.
@@ -295,12 +297,10 @@ test <- testProbes(toydat, nbCount=0, nbThresh=0, pvCount=0, nvarThresh=0)
   The testProbes function does not filter out failed probes automatically. The users can remove bad or problematic probes by subsetting the object. Here, there is an example of removing problematic probes:
   
 ```{r, eval=FALSE}
-library(minfiData)
-library(melonProbes)
 
-data("RGsetEx")  #Raw data (RGChannelSet) class sample dataset from minfiData package
-test <- testProbes(RGsetEx)
-testvar <- test[which(test$Variation==FALSE & test$DetectionP==FALSE),]
+data("melon")  #sample dataset from wateRmelon package
+test <- testProbes(melon)
+out <- test[which(test@featureData@data$Variation==FALSE),]
 ```
 
 
