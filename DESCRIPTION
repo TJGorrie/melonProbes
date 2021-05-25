@@ -3,10 +3,12 @@ Title: melonProbes
 Version: 0.0.2
 Authors@R: person('Tyler', 'Gorrie-Stone', email = 'tgorri@essex.ac.uk', role = c('aut', 'cre'))
 Description: Test for potentially problematic probes in DNA methylation microarray data
-Depends: R (>= 3.5.0), Biobase, methods
-Suggests: wateRmelon, bigmelon, minfi
-Collate: probeTests.R
+Depends: R (>= 3.5.0), Biobase, methods, wateRmelon, minfi, methylumi
 License:
 LazyData: true
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.1
 Encoding: UTF-8
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
